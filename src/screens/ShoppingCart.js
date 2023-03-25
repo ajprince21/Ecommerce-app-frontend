@@ -3,7 +3,7 @@ import React from 'react'
 import CartListItem from '../components/CartListItem';
 import cart from '../data/cart';
 
-const shoppingCartTotals = ()=>(
+const shoppingCartTotals = () => (
     <View style={styles.totalsContainer}>
         <View style={styles.row}>
             <Text style={styles.text}>Subtotal</Text>
@@ -23,40 +23,40 @@ const shoppingCartTotals = ()=>(
 
 const ShoppingCart = () => {
 
-  return (
-    <>
-        <FlatList
-            data={cart}
-            renderItem={({item})=><CartListItem cartItem={item}/>}
-            ListFooterComponent={shoppingCartTotals}
-        />
-        <Pressable style={styles.button} >
-            <Text style={styles.buttonText}>Checkout</Text>
-        </Pressable>
-    </>
-  )
+    return (
+        <>
+            <FlatList
+                data={cart}
+                renderItem={({ item }) => <CartListItem cartItem={item} />}
+                ListFooterComponent={shoppingCartTotals}
+            />
+            <Pressable style={styles.button} >
+                <Text style={styles.buttonText}>Checkout</Text>
+            </Pressable>
+        </>
+    )
 }
 
 export default ShoppingCart
 
 const styles = StyleSheet.create({
-    row :{
-        flexDirection:'row',
-        justifyContent:'space-between'
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
-    totalsContainer:{
-        margin:20,
-        paddingTop:10,
-        borderTopWidth:1,
-        borderColor:'gainsboro'
+    totalsContainer: {
+        margin: 20,
+        paddingTop: 10,
+        borderTopWidth: 1,
+        borderColor: 'gainsboro'
     },
-    text:{
-        fontSize:16,
-        color:'gray'
+    text: {
+        fontSize: 16,
+        color: 'gray'
     },
-    textBold:{
-        fontSize:16,
-        fontWeight:'500'
+    textBold: {
+        fontSize: 16,
+        fontWeight: '500'
     },
     button: {
         position: 'absolute',
