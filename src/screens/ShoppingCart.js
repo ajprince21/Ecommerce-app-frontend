@@ -22,7 +22,6 @@ const shoppingCartTotals = () => (
 
 
 const ShoppingCart = () => {
-
     return (
         <>
             <FlatList
