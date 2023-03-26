@@ -1,16 +1,15 @@
 import { StyleSheet, Text, View, Image, useWindowDimensions, ScrollView, Pressable } from 'react-native'
 import React from 'react'
-import products from '../data/products'
 import { FlatList } from 'react-native';
 
+import { useSelector } from 'react-redux';
 const ProductDetailsScreen = () => {
 
     const { width } = useWindowDimensions();
-
     const addToCart = () => {
         console.warn('Add to Cart')
     }
-    const product = products[0];
+    const product = useSelector((state) => state.products.selectedProduct);
     return (
         <View>
             <ScrollView>
