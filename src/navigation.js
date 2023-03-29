@@ -9,11 +9,12 @@ import { Pressable, Text } from "react-native";
 
 import { FontAwesome5 } from '@expo/vector-icons';
 
-
+import { useSelector } from "react-redux";
 const stack = createNativeStackNavigator();
 
 
 const Navigation = () => {
+    const cartItems = useSelector((state) => state.cart.items)
     return (
         <NavigationContainer>
             <stack.Navigator screenOptions={{ contentStyle: { backgroundColor: '#ffffff' } }}>
@@ -24,7 +25,7 @@ const Navigation = () => {
                         headerRight: () => (
                             <Pressable style={{ flexDirection: 'row' }} onPress={() => navigation.navigate('Cart')}>
                                 <FontAwesome5 name="shopping-cart" size={18} color="gray" />
-                                <Text style={{ marginLeft: 5, fontWeight: '500' }}>10</Text>
+                                <Text style={{ marginLeft: 5, fontWeight: '500' }}>{cartItems.length}</Text>
                             </Pressable>
                         )
                     })}
