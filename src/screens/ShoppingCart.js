@@ -8,7 +8,7 @@ const shoppingCartTotals = () => {
     const subtoatl = useSelector(selectSubTotal);
     const deliveryFees = useSelector(selectDeliveryPrice);
     const total = useSelector(selectToatlPrice)
-    return(
+    return (
         <View style={styles.totalsContainer}>
             <View style={styles.row}>
                 <Text style={styles.text}>Subtotal</Text>

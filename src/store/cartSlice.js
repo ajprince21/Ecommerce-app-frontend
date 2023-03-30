@@ -1,4 +1,4 @@
-import { createSlice , createSelector} from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 const initialState = {
     items: [],
@@ -45,5 +45,5 @@ export const selectDeliveryPrice = createSelector(
 );
 
 export const selectToatlPrice = createSelector(
-    selectSubTotal,selectDeliveryPrice, (subtotal, deliveryFee) => subtotal+deliveryFee
-)
+    selectSubTotal, selectDeliveryPrice, (subtotal, deliveryFee) => subtotal + deliveryFee
+);

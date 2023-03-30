@@ -19,7 +19,10 @@ const Navigation = () => {
     const numberOfItems = useSelector(selectNumberOfItems);
     return (
         <NavigationContainer>
-            <stack.Navigator screenOptions={{ contentStyle: { backgroundColor: '#ffffff' } }}>
+            <stack.Navigator
+                initialRouteName="Products"
+                screenOptions={{ contentStyle: { backgroundColor: '#ffffff' } }}
+            >
                 <stack.Screen
                     name="Products"
                     component={ProductsScreen}
@@ -30,6 +33,7 @@ const Navigation = () => {
                                 <Text style={{ marginLeft: 5, fontWeight: '500' }}>{numberOfItems}</Text>
                             </Pressable>
                         )
+
                     })}
                 />
                 <stack.Screen
