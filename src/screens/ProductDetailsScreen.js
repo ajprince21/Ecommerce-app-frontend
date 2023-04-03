@@ -8,7 +8,7 @@ import { useGetProductQuery } from '../store/apiSlice';
 const ProductDetailsScreen = ({ route }) => {
     const id = route.params.id;
     const {data, isLoading, error} = useGetProductQuery(id);
-
+    const product = data?.data;
     const { width } = useWindowDimensions();
     const dispatch = useDispatch()
 
@@ -21,7 +21,7 @@ const ProductDetailsScreen = ({ route }) => {
     if(error){
         return <Text>Error fetching the product, {error.error}</Text>
     }
-    const product = data.data;
+    
     return (
         <View>
             <ScrollView>
