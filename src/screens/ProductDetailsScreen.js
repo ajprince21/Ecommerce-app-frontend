@@ -15,7 +15,6 @@ const ProductDetailsScreen = ({ route }) => {
     const addToCart = () => {
         dispatch(cartSlice.actions.addCartItem({ product }))
     }
-    console.log(route);
     if(isLoading){
         return <ActivityIndicator/>;
     }
