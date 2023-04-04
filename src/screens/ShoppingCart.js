@@ -1,9 +1,10 @@
 import { FlatList, StyleSheet, Text, View, Pressable, ActivityIndicator, Alert } from 'react-native'
 import React from 'react'
 import CartListItem from '../components/CartListItem';
-import { useSelector } from 'react-redux';
-import { selectSubTotal, selectToatlPrice, selectDeliveryPrice } from '../store/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectSubTotal, selectToatlPrice, selectDeliveryPrice , clear, cartSlice} from '../store/cartSlice';
 import { useCreateOrderMutation } from '../store/apiSlice';
+
 
 const shoppingCartTotals = () => {
     const subtoatl = useSelector(selectSubTotal);
@@ -31,9 +32,12 @@ const shoppingCartTotals = () => {
 const ShoppingCart = () => {
     const subtoatl = useSelector(selectSubTotal);
     const deliveryFees = useSelector(selectDeliveryPrice);
-    const total = useSelector(selectToatlPrice)
-    const cartItems = useSelector((state) => state.cart.items);
+    const total = useSelector(selectToatlPrice);
 
+    const dispatch = useDispatch();
+
+
+    const cartItems = useSelector((state) => state.cart.items);
     const [createOrder, {data, error, isLoading}] = useCreateOrderMutation();
 
     const onCreateOrder = async() =>{
@@ -52,7 +56,8 @@ const ShoppingCart = () => {
             Alert.alert(
                 'Order has been submitted',
                 `Your order reference no is: ${result.data.data.ref}`
-            )
+            );
+            dispatch(cartSlice.actions.clear());
         }
     }
 

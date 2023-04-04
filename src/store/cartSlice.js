@@ -28,6 +28,9 @@ export const cartSlice = createSlice({
             if (cartItem.quantity <= 0) {
                 state.items = state.items.filter((item) => item !== cartItem);
             }
+        },
+        clear : (state) => {
+            state.items = [];
         }
     },
 })
