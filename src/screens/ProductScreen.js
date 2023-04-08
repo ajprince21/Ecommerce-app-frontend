@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Text, View, Image, FlatList, Pressable, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Image, FlatList, Pressable, ActivityIndicator, StatusBar } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { productsSlice } from '../store/productSlice';
 import { useGetProductsQuery } from '../store/apiSlice';
+import { FontAwesome5, MaterialCommunityIcons, Entypo, AntDesign } from '@expo/vector-icons';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Header } from '@rneui/themed';
 
 const ProductScreen = () => {
     const [isRefreshing, setIsRefreshing] = useState(false);
@@ -27,6 +30,36 @@ const ProductScreen = () => {
     const products = data.data;
     return (
         <View>
+            <Header
+                backgroundColor="#ffffff"
+                leftComponent={()=>(
+                   <Pressable onPress={()=>navigation.openDrawer()} style={{padding:10}}>
+                        <Image
+                            style={{height:30, width:30}}
+                            source={require('./icon.png')} 
+                        />
+                   </Pressable>
+                )}
+                rightComponent={()=>(
+                    <View style={{flexDirection:'row', alignItems:'center'}}>
+                        <Pressable onPress={()=> null} style={{padding:10}}>
+                            <AntDesign
+                                name="search1"
+                                size={30}
+                                color={'gray'}
+                                
+                            />
+                        </Pressable>
+                        <Pressable onPress={()=> null} style={{padding:10}}>
+                        <AntDesign
+                            name="filter"
+                            size={30}
+                            color={'gray'}
+                        />
+                        </Pressable>
+                    </View>
+                 )}
+            />
             <FlatList
                 data={products}
                 // onRefresh={onRefresh}
@@ -36,7 +69,7 @@ const ProductScreen = () => {
                         // update selected product
                         dispatch(productsSlice.actions.setSelectedProduct(item.id))
 
-                        navigation.navigate('Product Details',{id:item._id})
+                        navigation.navigate('Product Details', { id: item._id })
                     }}
                     >
                         <Image
@@ -59,6 +92,11 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         aspectRatio: 1
+    },
+    headerContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingTop: StatusBar.currentHeight
     }
 });
 
