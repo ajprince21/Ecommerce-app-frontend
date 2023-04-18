@@ -5,10 +5,11 @@ import { FlatList } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { cartSlice } from '../store/cartSlice';
 import { useGetProductQuery } from '../store/apiSlice';
+import { AntDesign } from '@expo/vector-icons';
 const ProductDetailsScreen = ({ route }) => {
     const id = route.params.id;
     const {data, isLoading, error} = useGetProductQuery(id);
-    const product = data?.data;
+    const product = data;
     const { width } = useWindowDimensions();
     const dispatch = useDispatch()
 
@@ -23,12 +24,23 @@ const ProductDetailsScreen = ({ route }) => {
     }
     
     return (
-        <View>
+        <View style={{paddingBottom:100}}>
             <ScrollView>
                 <FlatList
                     data={product.images}
                     renderItem={({ item }) => (
-                        <Image source={{ uri: item }} style={[{ width }, styles.image]} />
+                        <View>
+                            <Image source={{ uri: item }} style={[{ width }, styles.image]} />
+                            <Pressable onPress={()=> null} 
+                                style={{position:'absolute',backgroundColor: 'transparent',right: 15,top:15}}
+                            >
+                                <AntDesign
+                                    name="hearto"
+                                    size={28}
+                                    color={'gray'}
+                                />
+                            </Pressable>
+                        </View> 
                     )}
                     horizontal
                     showsHorizontalScrollIndicator={false}

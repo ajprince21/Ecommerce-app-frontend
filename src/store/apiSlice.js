@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const baseUrl = 'http://192.168.29.98:3000/';
+const baseUrl = 'http://192.168.29.98:8000/';
 
 // Define a service using a base URL and expected endpoints
 export const apiSlice = createApi({
