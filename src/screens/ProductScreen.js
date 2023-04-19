@@ -11,36 +11,39 @@ import axios from 'axios';
 
 const ProductScreen = () => {
     const [isRefreshing, setIsRefreshing] = useState(false);
+    const [products, setProducts] = useState([]);
+    const [isLoading, setLoading] = useState(true);
     const navigation = useNavigation();
     const dispatch = useDispatch();
 
     useEffect(() => {
        getProducts();
-    });
+    },[]);
 
     getProducts = async () =>{
         axios
-        .get('http://192.168.29.98:8000/products')
-        .then(data => console.log(data.data))
-        .catch(error => console.log(error));
+        .get('http://192.168.29.98:8000/products/')
+        .then(res => {
+            // console.log(data.data);
+            setProducts(res.data.data)
+            setLoading(false)
+            setIsRefreshing(false)
+        })
+        .catch(error => {
+            setLoading(false)
+            setIsRefreshing(false)
+            console.log(error)
+        });
     }
 
-
-
-    const { data, isLoading, error } = useGetProductsQuery();
     const onRefresh = () => {
         setIsRefreshing(true)
-        // callApiMethod()
-        // and set isRefreshing to false at the end of your callApiMethod()
+        getProducts()
     }
 
     if (isLoading) {
         return <ActivityIndicator />;
     }
-    if (error) {
-        return <Text> Error fetching products{error.error}</Text>
-    }
-    const products = data.data;
     return (
         <View style={styles.container}>
             <Header
@@ -49,8 +52,8 @@ const ProductScreen = () => {
                    <Pressable onPress={()=>navigation.openDrawer()} style={{padding:10 , flexDirection:'row', alignItems:'center'}}>
                         <MaterialCommunityIcons name="menu-open" size ={35} color={'gray'} />
                         <Image
-                            style={{height:28, width:28}}
-                            source={require('./icon.png')} 
+                            style={{height:28, width:50,resizeMode:'contain'}}
+                            source={require('../assets/images/icon.png')} 
                         />
                    </Pressable>
                 )}
@@ -83,8 +86,8 @@ const ProductScreen = () => {
             />
             <FlatList
                 data={products}
-                // onRefresh={onRefresh}
-                // refreshing={isRefreshing}
+                onRefresh={onRefresh}
+                refreshing={isRefreshing}
                 style={{margin:5}}
                 columnWrapperStyle={styles.row}
                 renderItem={({ item }) => (
@@ -96,7 +99,7 @@ const ProductScreen = () => {
                     }}
                     >   
                         <Image
-                            source={{ uri: item.image}}
+                            source={{ uri: item.image_url}}
                             style={styles.image}
                         />
                         <Text numberOfLines={1} style={styles.nameText}>{item.name}</Text>
@@ -123,8 +126,9 @@ const styles = StyleSheet.create({
         margin:2
     },
     image: {
-        width: '100%',
+        width: '95%',
         aspectRatio: 1,
+        resizeMode:'contain'
     },
     headerContainer: {
         flexDirection: 'row',
