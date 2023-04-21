@@ -10,7 +10,8 @@ const ProductDetailsScreen = ({ route }) => {
     const id = route.params.id;
     const {data, isLoading, error} = useGetProductQuery(id);
     const product = data;
-    const { width } = useWindowDimensions();
+    console.log(product)
+    let { width } = useWindowDimensions();
     const dispatch = useDispatch()
 
     const addToCart = () => {
@@ -28,20 +29,22 @@ const ProductDetailsScreen = ({ route }) => {
             <ScrollView>
                 <FlatList
                     data={product.images}
-                    renderItem={({ item }) => (
-                        <View>
-                            <Image source={{ uri: item }} style={[{ width }, styles.image]} />
-                            <Pressable onPress={()=> null} 
-                                style={{position:'absolute',backgroundColor: 'transparent',right: 15,top:15}}
-                            >
-                                <AntDesign
-                                    name="hearto"
-                                    size={28}
-                                    color={'gray'}
-                                />
-                            </Pressable>
-                        </View> 
-                    )}
+                    renderItem={({ item }) => {
+                        return (
+                            <View>
+                                <Image source={{ uri: item.image }} style={[{ width }, styles.image]} />
+                                <Pressable onPress={()=> null} 
+                                    style={{position:'absolute',backgroundColor: 'transparent',right: 15,top:15}}
+                                >
+                                    <AntDesign
+                                        name="hearto"
+                                        size={28}
+                                        color={'gray'}
+                                    />
+                                </Pressable>
+                            </View> 
+                        )
+                    }}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     pagingEnabled

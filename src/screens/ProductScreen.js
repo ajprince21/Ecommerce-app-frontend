@@ -24,8 +24,7 @@ const ProductScreen = () => {
         axios
         .get('http://192.168.29.98:8000/products/')
         .then(res => {
-            // console.log(data.data);
-            setProducts(res.data.data)
+            setProducts(res.data)
             setLoading(false)
             setIsRefreshing(false)
         })
@@ -99,7 +98,7 @@ const ProductScreen = () => {
                     }}
                     >   
                         <Image
-                            source={{ uri: item.image_url}}
+                            source={{ uri: item.image}}
                             style={styles.image}
                         />
                         <Text numberOfLines={1} style={styles.nameText}>{item.name}</Text>
