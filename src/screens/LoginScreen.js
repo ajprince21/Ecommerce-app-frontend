@@ -1,29 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Animated, Easing, TouchableOpacity, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { FontAwesome } from '@expo/vector-icons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 
 const LoginScreen = () => {
 	const navigation = useNavigation();
-	const [email, setEmail] = useState('');
+	const [userName, setUserName] = useState('');
 	const [password, setPassword] = useState('');
 	const [logoScale] = useState(new Animated.Value(0.7));
 	const [buttonScale] = useState(new Animated.Value(1.0));
 	const [buttonOpacity] = useState(new Animated.Value(1.0));
 
-	const handleLogin = () => {
-		// Handle login logic here
-		navigation.navigate('Products')
-		if (validateEmail(email)) {
-			// Handle login logic here
 
-		} else {
-			Alert.alert('Invalid email', 'Please enter a valid email address.');
+
+	const storeData = async (value) => {
+		try {
+		  const jsonValue = JSON.stringify(value)
+		  await AsyncStorage.setItem('userToken', jsonValue)
+		  navigation.navigate('MyDrawer');
+		} catch (e) {
+		  // saving error
 		}
-	};
-	const validateEmail = (email) => {
-		const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-		return regex.test(email);
+	}
+
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener('focus', () => {
+		  // Set initial state data for all states here
+		  setUserName('');
+		  setPassword('');
+		});
+	
+		// Cleanup the listener when component unmounts
+		return () => unsubscribe();
+	}, [navigation]);
+
+	const handleLogin = async () => {
+		axios
+        .post('http://192.168.29.98:8000/login/',{
+			username:userName,
+			password:password
+		})
+        .then(res => {
+			if(res.data && res.data.userToken){
+				storeData(res.data.userToken);
+			}
+        })
+        .catch(error => {
+            console.log(error)
+        });
 	};
 
 	const handlePressIn = () => {
@@ -56,36 +85,14 @@ const LoginScreen = () => {
 		]).start(() => handleLogin());
 	};
 
-	useEffect(() => {
-		Animated.loop(
-			Animated.sequence([
-				Animated.timing(logoScale, {
-					toValue: 1.0,
-					duration: 1000,
-					easing: Easing.out(Easing.quad),
-					useNativeDriver: true,
-				}),
-				Animated.timing(logoScale, {
-					toValue: 0.7,
-					duration: 1000,
-					easing: Easing.in(Easing.quad),
-					useNativeDriver: true,
-				}),
-			])
-		).start();
-	}, []);
-
 	return (
 		<View style={styles.container}>
-			<Animated.Image
-				style={[styles.logo, { transform: [{ scale: logoScale }] }]}
-				source={require('./icon.png')}
-			/>
+			<FontAwesome size={100} name="user-circle" style={{margin:20, alignSelf:'center'}} color={"tomato"}/>
 			<TextInput
 				style={styles.input}
-				placeholder="Email"
-				value={email}
-				onChangeText={setEmail}
+				placeholder="Usernamer"
+				value={userName}
+				onChangeText={setUserName}
 			/>
 			<TextInput
 				style={styles.input}
@@ -94,21 +101,10 @@ const LoginScreen = () => {
 				value={password}
 				onChangeText={setPassword}
 			/>
-			<TouchableOpacity
-				style={styles.buttonContainer}
-				onPressIn={handlePressIn}
-				onPressOut={handlePressOut}
-				activeOpacity={1.0}
-			>
-				<Animated.View
-					style={[
-						styles.button,
-						{ transform: [{ scale: buttonScale }], opacity: buttonOpacity },
-					]}
-				>
-					<Text style={styles.buttonText}>Login</Text>
-				</Animated.View>
+			<TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
+				<Text style={styles.buttonText}>Login</Text>
 			</TouchableOpacity>
+			<Text style={styles.loginText} onPress={()=>navigation.navigate('SignUp')}>Dont't have account? Sign up</Text>
 		</View>
 	);
 };
@@ -116,9 +112,8 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		alignItems: 'center',
-		padding: 20,
-		backgroundColor: '#ffffff'
+		padding: 16,
+		backgroundColor: '#fff',
 	},
 	logo: {
 		width: 150,
@@ -126,12 +121,13 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 	},
 	input: {
-		height: 40,
+		paddingVertical: 10,
 		width: '100%',
 		borderColor: 'gray',
 		borderWidth: 1,
 		marginBottom: 20,
 		paddingHorizontal: 10,
+		borderRadius:8
 	},
 	buttonContainer: {
 		width: '100%',
@@ -144,9 +140,21 @@ const styles = StyleSheet.create({
 		borderRadius: 5,
 	},
 	buttonText: {
-		color: '#fff',
-		fontSize: 16,
+		color: 'white',
+		fontSize: 18,
 		fontWeight: 'bold',
+		textAlign: 'center',
+	  },
+	buttonContainer: {
+		backgroundColor: 'blue',
+		paddingVertical: 16,
+		borderRadius: 8,
+	},
+	loginText: {
+		marginTop: 16,
+		alignSelf: 'center',
+		color: 'gray',
+		fontSize: 16,
 	},
 });
 

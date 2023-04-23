@@ -2,8 +2,11 @@ import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navi
 import { View, TextInput, StyleSheet, TouchableOpacity, Text, Linking } from 'react-native';
 import DrawerProfile from '../components/DrawerProfile ';
 import { FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CustomDrawerContent(props) {
+  const navigation = useNavigation();
   return (
     <DrawerContentScrollView {...props}>
       <DrawerProfile />
@@ -24,7 +27,12 @@ export default function CustomDrawerContent(props) {
             color={focused ? '#7cc' : '#ccc'}
           />
         }
-        onPress={() => Linking.openURL('https://mywebsite.com/help')}
+        onPress={ async () =>
+          {
+            await AsyncStorage.removeItem('userToken')
+            navigation.navigate('SignIn')
+          }
+        }
       />
     </DrawerContentScrollView>
   );
