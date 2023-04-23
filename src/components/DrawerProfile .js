@@ -30,7 +30,7 @@ const DrawerProfile = (props) => {
 					<View style={styles.profileIconContainer}>
 						<Icon name="user-circle" size={80} color="#fff" />
 					</View>
-					<Text style={styles.name}>{userToken.username}</Text>
+					<Text style={styles.name}>{userToken.username.toUpperCase()}</Text>
 					<Text style={styles.email}>{userToken.email}</Text>
 					<TouchableOpacity style={styles.editProfileButton}>
 						<Text style={styles.editProfileButtonText}>Edit Profile</Text>

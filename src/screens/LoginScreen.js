@@ -87,7 +87,7 @@ const LoginScreen = () => {
 
 	return (
 		<View style={styles.container}>
-			<FontAwesome size={100} name="user-circle" style={{margin:20, alignSelf:'center'}} color={"tomato"}/>
+			<FontAwesome size={100} name="user-circle" style={{margin:24, alignSelf:'center'}} color={"tomato"}/>
 			<TextInput
 				style={styles.input}
 				placeholder="Usernamer"

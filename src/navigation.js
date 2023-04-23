@@ -53,8 +53,8 @@ const Navigation = () => {
 					component={ProductDetailsScreen}
 					options={{ presentation: 'modal' }}
 				/>
-				<stack.Screen name="SignIn" component={LoginScreen} />
-				<stack.Screen name="SignUp" component={SignUpScreen} />
+				<stack.Screen name="SignIn" component={LoginScreen} options={{  headerShown: false, }} />
+				<stack.Screen name="SignUp" component={SignUpScreen} options={{  headerShown: false, }} />
 			</stack.Navigator>
 		</NavigationContainer>
 

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, Pressable, ActivityIndicator, Alert } from 'react-native'
+import { FlatList, StyleSheet, Text, View, Pressable, ActivityIndicator, Alert,Image } from 'react-native'
 import React from 'react'
 import CartListItem from '../components/CartListItem';
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,22 +10,22 @@ const shoppingCartTotals = () => {
     const subtoatl = useSelector(selectSubTotal);
     const deliveryFees = useSelector(selectDeliveryPrice);
     const total = useSelector(selectToatlPrice)
-    return (
-        <View style={styles.totalsContainer}>
-            <View style={styles.row}>
-                <Text style={styles.text}>Subtotal</Text>
-                <Text style={styles.text}>{subtoatl}</Text>
+        return (
+            <View style={styles.totalsContainer}>
+                <View style={styles.row}>
+                    <Text style={styles.text}>Subtotal</Text>
+                    <Text style={styles.text}>{subtoatl}</Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.text}>Delivery</Text>
+                    <Text style={styles.text}>{deliveryFees}</Text>
+                </View>
+                <View style={styles.row}>
+                    <Text style={styles.textBold}>Total</Text>
+                    <Text style={styles.textBold}>{total}</Text>
+                </View>
             </View>
-            <View style={styles.row}>
-                <Text style={styles.text}>Delivery</Text>
-                <Text style={styles.text}>{deliveryFees}</Text>
-            </View>
-            <View style={styles.row}>
-                <Text style={styles.textBold}>Total</Text>
-                <Text style={styles.textBold}>{total}</Text>
-            </View>
-        </View>
-    )
+        )
 };
 
 
@@ -65,12 +65,23 @@ const ShoppingCart = () => {
         <>
             <FlatList
                 data={cartItems}
+                style={{backgroundColor:'white'}}
                 renderItem={({ item }) => <CartListItem cartItem={item} />}
-                ListFooterComponent={shoppingCartTotals}
+                ListFooterComponent={cartItems.length > 0 && shoppingCartTotals}
+                ListEmptyComponent={ 
+                    <View style={styles.emptyListComponent}>
+                        <Image
+                            style={{height:200, width:200,resizeMode:'contain',margin:25 }}
+                            source={require('../assets/images/empty-cart.png')} 
+                        />
+                    </View>
+                }
             />
-            <Pressable style={styles.button} onPress={onCreateOrder} >
-                <Text style={styles.buttonText}>Checkout {isLoading && <ActivityIndicator/>} </Text>
-            </Pressable>
+            {cartItems.length > 0 && 
+                <Pressable style={styles.button} onPress={onCreateOrder} >
+                    <Text style={styles.buttonText}>Checkout {isLoading && <ActivityIndicator/>} </Text>
+                </Pressable>
+            }
         </>
     )
 }
@@ -98,7 +109,7 @@ const styles = StyleSheet.create({
     },
     button: {
         position: 'absolute',
-        backgroundColor: 'black',
+        backgroundColor: '#4681f4',
         bottom: 30,
         width: '90%',
         alignSelf: 'center',
@@ -110,5 +121,9 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: '500'
-    }
+    },
+    emptyListComponent: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 })
