@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "NikeApp",
-    "slug": "NikeApp",
+    "name": "Ecommerce",
+    "slug": "Ecommerce",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.ajprince21.NikeApp"
+      "package": "com.ajprince21.Ecommerce"
     },
     "web": {
       "favicon": "./assets/favicon.png"
