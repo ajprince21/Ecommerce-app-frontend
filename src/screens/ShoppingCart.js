@@ -1,8 +1,8 @@
 import { FlatList, StyleSheet, Text, View, Pressable, ActivityIndicator, Alert,Image } from 'react-native'
-import React from 'react'
+import { useEffect, useState } from 'react';
 import CartListItem from '../components/CartListItem';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectSubTotal, selectToatlPrice, selectDeliveryPrice , clear, cartSlice} from '../store/cartSlice';
+import { selectSubTotal, selectToatlPrice, selectDeliveryPrice , clear, cartSlice, fetchCart } from '../store/cartSlice';
 import { useCreateOrderMutation } from '../store/apiSlice';
 
 
@@ -35,8 +35,12 @@ const ShoppingCart = () => {
     const total = useSelector(selectToatlPrice);
 
     const dispatch = useDispatch();
+    const { items, loading } = useSelector((state) => state.cart);
 
-
+    useEffect(() => {
+        dispatch(fetchCart());
+    }, []);
+    console.log('hii',items,loading, error);
     const cartItems = useSelector((state) => state.cart.items);
     const [createOrder, {data, error, isLoading}] = useCreateOrderMutation();
 

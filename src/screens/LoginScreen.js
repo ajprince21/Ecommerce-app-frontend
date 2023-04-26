@@ -4,28 +4,19 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import { loginStart, loginSuccess, loginFail } from '../store/authSlice';
 
 
 
 const LoginScreen = () => {
 	const navigation = useNavigation();
+	const dispatch = useDispatch();
 	const [userName, setUserName] = useState('');
 	const [password, setPassword] = useState('');
 	const [logoScale] = useState(new Animated.Value(0.7));
 	const [buttonScale] = useState(new Animated.Value(1.0));
 	const [buttonOpacity] = useState(new Animated.Value(1.0));
-
-
-
-	const storeData = async (value) => {
-		try {
-		  const jsonValue = JSON.stringify(value)
-		  await AsyncStorage.setItem('userToken', jsonValue)
-		  navigation.navigate('MyDrawer');
-		} catch (e) {
-		  // saving error
-		}
-	}
 
 
 	useEffect(() => {
@@ -40,18 +31,18 @@ const LoginScreen = () => {
 	}, [navigation]);
 
 	const handleLogin = async () => {
+		dispatch(loginStart());
 		axios
         .post('http://192.168.29.98:8000/login/',{
 			username:userName,
 			password:password
 		})
         .then(res => {
-			if(res.data && res.data.userToken){
-				storeData(res.data.userToken);
-			}
+			dispatch(loginSuccess(res.data.token));
+			navigation.navigate('MyDrawer');
         })
         .catch(error => {
-            console.log(error)
+            dispatch(loginFail(error.message));
         });
 	};
 
