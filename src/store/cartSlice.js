@@ -12,17 +12,6 @@ const initialState = {
     error: null,
 };
 
-
-// export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
-//     const response = await axios.get(baseUrl+'cart/',{
-//         headers: {
-//             Authorization: 'Token '+tokendata.token
-//         },
-//     });
-//     return response.data;
-// });
-
-
 export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { getState }) => {
     const { token } = getState().auth; // Access token from the auth slice 
     const response = await axios.get(baseUrl + 'cart/', {

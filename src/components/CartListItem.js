@@ -26,10 +26,10 @@ const CartListItem = ({ cartItem }) => {
 
 	return (
 		<View style={styles.container}>
-			<Image source={{ uri: cartItem.product.image }} style={styles.image} />
+			<Image source={{ uri: cartItem.product_image }} style={styles.image} />
 			<View style={styles.contentContainer}>
-				<Text style={styles.name}>{cartItem.product.name}</Text>
-				<Text style={styles.size}>Size {cartItem.size}</Text>
+				<Text style={styles.name}>{cartItem.product}</Text>
+				<Text style={styles.size}>Size {cartItem.sizes}</Text>
 
 				<View style={styles.footer}>
 					<Feather
@@ -45,7 +45,7 @@ const CartListItem = ({ cartItem }) => {
 						size={24}
 						color="gray"
 					/>
-					<Text style={styles.itemTotal}>₹ {cartItem.product.price * cartItem.quantity}</Text>
+					<Text style={styles.itemTotal}>₹ {cartItem.total_price}</Text>
 				</View>
 			</View>
 		</View>

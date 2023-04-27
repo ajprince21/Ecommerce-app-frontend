@@ -42,7 +42,7 @@ const ShoppingCart = () => {
         dispatch(fetchCart());
     }, []);
     
-
+    console.log(items);
     const onCreateOrder = async() =>{
         const cartItems = items;
         const result = await createOrder({
