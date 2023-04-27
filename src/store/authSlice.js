@@ -1,6 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
 
 const initialState = {
   token: null,
@@ -8,7 +7,7 @@ const initialState = {
   error: null,
 };
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
@@ -21,7 +20,6 @@ const authSlice = createSlice({
       state.error = null;
       state.token = action.payload;
       AsyncStorage.setItem('token', action.payload);
-      navigation.navigate('MyDrawer');
     },
     loginFail(state, action) {
       state.isLoading = false;
@@ -34,6 +32,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginStart, loginSuccess, loginFail, logout } = authSlice.actions;
-
-export default authSlice.reducer;
+export const { loginStart, loginSuccess, loginFail, logout } = authSlice;
+export const token = (state) => state.auth.token;

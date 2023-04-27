@@ -1,6 +1,8 @@
 import { createSlice, createSelector, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {baseUrl} from '../environment';
+
 
 const initialState = {
     items: [],
@@ -9,18 +11,27 @@ const initialState = {
     loading: false,
     error: null,
 };
-const baseUrl = 'http://192.168.29.98:8000/';
 
-export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
-    let token = await AsyncStorage.getItem('userToken');
-    console.log(token)
-    const response = await axios.get('http://192.168.29.98:8000/cart/',{
-        headers: {
-            Authorization: 'Token '+"0cbdd6094a84d2e7d60e9c34c343286ec4ae8031"
-        },
+
+// export const fetchCart = createAsyncThunk('cart/fetchCart', async () => {
+//     const response = await axios.get(baseUrl+'cart/',{
+//         headers: {
+//             Authorization: 'Token '+tokendata.token
+//         },
+//     });
+//     return response.data;
+// });
+
+
+export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { getState }) => {
+    const { token } = getState().auth; // Access token from the auth slice 
+    const response = await axios.get(baseUrl + 'cart/', {
+      headers: {
+        Authorization: `Token ${token.token}`,
+      },
     });
     return response.data;
-});
+  });
 
 
 export const cartSlice = createSlice({
@@ -30,7 +41,6 @@ export const cartSlice = createSlice({
         addCartItem: (state, action) => {
             const newProduct = action.payload.product;
             const cartItem = state.items.find((item) => item.product.id === newProduct.id);
-            console.log('cartItem',cartItem);
             if (cartItem) {
                 cartItem.quantity += 1;
             } else {

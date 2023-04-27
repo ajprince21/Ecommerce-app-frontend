@@ -10,22 +10,22 @@ const shoppingCartTotals = () => {
     const subtoatl = useSelector(selectSubTotal);
     const deliveryFees = useSelector(selectDeliveryPrice);
     const total = useSelector(selectToatlPrice)
-        return (
-            <View style={styles.totalsContainer}>
-                <View style={styles.row}>
-                    <Text style={styles.text}>Subtotal</Text>
-                    <Text style={styles.text}>{subtoatl}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.text}>Delivery</Text>
-                    <Text style={styles.text}>{deliveryFees}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.textBold}>Total</Text>
-                    <Text style={styles.textBold}>{total}</Text>
-                </View>
+    return (
+        <View style={styles.totalsContainer}>
+            <View style={styles.row}>
+                <Text style={styles.text}>Subtotal</Text>
+                <Text style={styles.text}>{subtoatl}</Text>
             </View>
-        )
+            <View style={styles.row}>
+                <Text style={styles.text}>Delivery</Text>
+                <Text style={styles.text}>{deliveryFees}</Text>
+            </View>
+            <View style={styles.row}>
+                <Text style={styles.textBold}>Total</Text>
+                <Text style={styles.textBold}>{total}</Text>
+            </View>
+        </View>
+    )
 };
 
 
@@ -35,16 +35,16 @@ const ShoppingCart = () => {
     const total = useSelector(selectToatlPrice);
 
     const dispatch = useDispatch();
-    const { items, loading } = useSelector((state) => state.cart);
+    const { items, loading , error  } = useSelector((state) => state.cart);
+    const [createOrder, {data, isLoading}] = useCreateOrderMutation();
 
     useEffect(() => {
         dispatch(fetchCart());
     }, []);
-    console.log('hii',items,loading, error);
-    const cartItems = useSelector((state) => state.cart.items);
-    const [createOrder, {data, error, isLoading}] = useCreateOrderMutation();
+    
 
     const onCreateOrder = async() =>{
+        const cartItems = items;
         const result = await createOrder({
             items :cartItems,
             subtoatl,
@@ -64,14 +64,17 @@ const ShoppingCart = () => {
             dispatch(cartSlice.actions.clear());
         }
     }
+    if (loading) {
+        return <ActivityIndicator />;
+    }
 
     return (
         <>
             <FlatList
-                data={cartItems}
+                data={items}
                 style={{backgroundColor:'white'}}
                 renderItem={({ item }) => <CartListItem cartItem={item} />}
-                ListFooterComponent={cartItems.length > 0 && shoppingCartTotals}
+                ListFooterComponent={items?.length > 0 && shoppingCartTotals}
                 ListEmptyComponent={ 
                     <View style={styles.emptyListComponent}>
                         <Image
@@ -81,7 +84,7 @@ const ShoppingCart = () => {
                     </View>
                 }
             />
-            {cartItems.length > 0 && 
+            {items?.length > 0 && 
                 <Pressable style={styles.button} onPress={onCreateOrder} >
                     <Text style={styles.buttonText}>Checkout {isLoading && <ActivityIndicator/>} </Text>
                 </Pressable>

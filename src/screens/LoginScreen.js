@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import {baseUrl} from '../environment';
 import { View, TextInput, Button, StyleSheet, Animated, Easing, TouchableOpacity, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { loginStart, loginSuccess, loginFail } from '../store/authSlice';
+import { authSlice } from '../store/authSlice';
+
 
 
 
@@ -29,51 +31,21 @@ const LoginScreen = () => {
 		// Cleanup the listener when component unmounts
 		return () => unsubscribe();
 	}, [navigation]);
-
+	// dispatch(cartSlice.actions.addCartItem({ product }))
 	const handleLogin = async () => {
-		dispatch(loginStart());
 		axios
-        .post('http://192.168.29.98:8000/login/',{
+        .post(baseUrl+'login/',{
 			username:userName,
 			password:password
 		})
         .then(res => {
-			dispatch(loginSuccess(res.data.token));
+			dispatch(authSlice.actions.loginSuccess(res.data.userToken));
 			navigation.navigate('MyDrawer');
         })
         .catch(error => {
-            dispatch(loginFail(error.message));
+			console.warn(error.message)
+            dispatch(authSlice.actions.loginFail(error.message));
         });
-	};
-
-	const handlePressIn = () => {
-		Animated.parallel([
-			Animated.timing(buttonScale, {
-				toValue: 0.9,
-				duration: 200,
-				useNativeDriver: true,
-			}),
-			Animated.timing(buttonOpacity, {
-				toValue: 0.5,
-				duration: 200,
-				useNativeDriver: true,
-			}),
-		]).start();
-	};
-
-	const handlePressOut = () => {
-		Animated.parallel([
-			Animated.timing(buttonScale, {
-				toValue: 1.0,
-				duration: 200,
-				useNativeDriver: true,
-			}),
-			Animated.timing(buttonOpacity, {
-				toValue: 1.0,
-				duration: 200,
-				useNativeDriver: true,
-			}),
-		]).start(() => handleLogin());
 	};
 
 	return (

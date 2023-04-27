@@ -2,20 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {token} from '../store/authSlice';
+import { useSelector } from 'react-redux';
 
 
 const DrawerProfile = (props) => {
 	const [userToken, setUserToken] = useState(null);
+	const tokendata = useSelector(token);
 
-
-	const getUserToken = async () => {
-		let token = await AsyncStorage.getItem('userToken');
-		token = token != null ? JSON.parse(token) : null;
-		setUserToken(token);
-	};
 	useEffect(() => {
-		getUserToken();
+		setUserToken(tokendata)
 	}, []);
 
 	return (
