@@ -5,8 +5,10 @@ import { useNavigation } from '@react-navigation/native';
 import { FontAwesome } from '@expo/vector-icons';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import { loginStart, loginSuccess, loginFail } from '../store/authSlice';
+import { loginSuccess } from '../store/authSlice';
 import { authSlice } from '../store/authSlice';
+import { storeUserToken } from '../store/AsyncStorage';
+
 
 
 
@@ -38,13 +40,12 @@ const LoginScreen = () => {
 			username:userName,
 			password:password
 		})
-        .then(res => {
-			dispatch(authSlice.actions.loginSuccess(res.data.userToken));
-			navigation.navigate('MyDrawer');
+        .then(async res => {
+			await storeUserToken(res.data.userToken);
+    		dispatch(loginSuccess());
         })
         .catch(error => {
 			console.warn(error.message)
-            dispatch(authSlice.actions.loginFail(error.message));
         });
 	};
 

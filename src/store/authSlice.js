@@ -1,36 +1,50 @@
 import { createSlice } from '@reduxjs/toolkit';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storeUserToken, retrieveUserToken } from '../store/AsyncStorage';
 
 const initialState = {
-  token: null,
-  isLoading: false,
-  error: null,
+    isLoggedIn: false,
+    token: null,
+    error: null,
 };
 
 export const authSlice = createSlice({
-  name: 'auth',
-  initialState,
-  reducers: {
-    loginStart(state) {
-      state.isLoading = true;
-      state.error = null;
+    name: 'auth',
+    initialState,
+    reducers: {
+        loginSuccess(state, action) {
+            state.isLoggedIn = true;
+            state.token = action.payload;
+        },
+        loginFailure: (state, action) => {
+            state.error = action.payload;
+            state.isLoggedIn = false;
+            state.token = null;
+        },
+        logoutSuccess(state) {
+            state.isLoggedIn = false;
+            state.token = null;
+        },
     },
-    loginSuccess(state, action) {
-      state.isLoading = false;
-      state.error = null;
-      state.token = action.payload;
-      AsyncStorage.setItem('token', action.payload);
-    },
-    loginFail(state, action) {
-      state.isLoading = false;
-      state.error = action.payload;
-    },
-    logout(state) {
-      state.token = null;
-      AsyncStorage.removeItem('token');
-    },
-  },
 });
 
-export const { loginStart, loginSuccess, loginFail, logout } = authSlice;
-export const token = (state) => state.auth.token;
+
+
+export const { loginSuccess, logoutSuccess , loginFailure} = authSlice.actions;
+
+
+export const authCheck = () => async (dispatch) => {
+    try {
+        const token = await retrieveUserToken();
+        if (token) {
+            dispatch(loginSuccess(token));
+        } else {
+            dispatch(logoutSuccess());
+        }
+    } catch (err) {
+        console.log(err);
+        dispatch(logoutSuccess());
+    }
+};
+
+export const selectToken = (state) => state.auth.token;
+export default authSlice.reducer;

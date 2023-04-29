@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { LinearGradient } from 'expo-linear-gradient';
-import {token} from '../store/authSlice';
+import { selectToken } from '../store/authSlice';
 import { useSelector } from 'react-redux';
 
 
 const DrawerProfile = (props) => {
 	const [userToken, setUserToken] = useState(null);
-	const tokendata = useSelector(token);
+	const token = useSelector(selectToken);
 
 	useEffect(() => {
-		setUserToken(tokendata)
+		setUserToken(token)
 	}, []);
 
 	return (
@@ -21,7 +21,7 @@ const DrawerProfile = (props) => {
 			end={{ x: 1, y: 0 }}
 			style={styles.profileContainer}
 		>
-			{userToken 
+			{userToken
 				? <>
 					<View style={styles.profileIconContainer}>
 						<Icon name="user-circle" size={80} color="#fff" />
