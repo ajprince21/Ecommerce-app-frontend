@@ -41,7 +41,6 @@ const ShoppingCart = () => {
     const { items, loading , error  } = useSelector((state) => state.cart);
     const [createOrder, {data, isLoading}] = useCreateOrderMutation();
 
-
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
           dispatch(fetchCart());
@@ -79,7 +78,8 @@ const ShoppingCart = () => {
         <>
             <FlatList
                 data={items}
-                style={{backgroundColor:'white'}}
+                style={{backgroundColor:'white',}}
+                contentContainerStyle={{paddingBottom:100}}
                 renderItem={({ item }) => <CartListItem cartItem={item} />}
                 ListFooterComponent={items?.length > 0 && shoppingCartTotals}
                 ListEmptyComponent={ 

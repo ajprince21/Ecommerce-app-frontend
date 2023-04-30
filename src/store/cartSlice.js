@@ -10,7 +10,10 @@ const initialState = {
     freeDeliveryFrom: 200,
     loading: false,
     error: null,
+    status:'idle'
 };
+
+
 
 export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { getState }) => {
     const { token } = getState().auth; // Access token from the auth slice 
@@ -20,35 +23,37 @@ export const fetchCart = createAsyncThunk('cart/fetchCart', async (_, { getState
       },
     });
     return response.data;
-  });
+});
+
+export const addCartItem = createAsyncThunk('cart/addCartItem', async (newProduct, { getState, dispatch  }) => {
+    const { token } = getState().auth;
+    await dispatch(fetchCart()); // fetch latest cart data before adding new item
+    const { items } = getState().cart;
+    const existingCartItem = items.find(item => item.product_id === newProduct.id);
+    if (existingCartItem) {
+      const response = await axios.put(baseUrl + `cart/update/${existingCartItem.id}/`, { quantity: existingCartItem.quantity + 1 }, {
+        headers: {
+          Authorization: `Token ${token.token}`,
+        },
+      });
+      return response.data;
+    } else {
+        const response = await axios.post(baseUrl + `cart/add/${newProduct.id}/`, { product_id: newProduct.id }, {
+            headers: {
+              Authorization: `Token ${token.token}`,
+            },
+        });
+        return response.data;
+    }
+});
+
 
 
 export const cartSlice = createSlice({
     name: 'cart',
     initialState,
     reducers: {
-        addCartItem: (state, action) => {
-            const newProduct = action.payload.product;
-            const cartItem = state.items.find((item) => item.product.id === newProduct.id);
-            if (cartItem) {
-                cartItem.quantity += 1;
-            } else {
-                state.items.push({ product: newProduct, quantity: 1 })
-            }
-        },
-        changeQuantity: (state, action) => {
-            const { productId, amount } = action.payload;
-            const cartItem = state.items.find((item) => item.product.id === productId);
-            if (cartItem) {
-                cartItem.quantity += amount;
-            }
-            if (cartItem.quantity <= 0) {
-                state.items = state.items.filter((item) => item !== cartItem);
-            }
-        },
-        clear : (state) => {
-            state.items = [];
-        }
+       
     },
     extraReducers: (builder) => {
         builder
@@ -62,13 +67,22 @@ export const cartSlice = createSlice({
         .addCase(fetchCart.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
-        });
+        })
+        .addCase(addCartItem.pending, state => {
+            state.status = 'loading';
+        })
+        .addCase(addCartItem.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+        })
+        .addCase(addCartItem.rejected, (state, action) => {
+            state.status = 'failed';
+        })
     },
 })
 
 export const selectNumberOfItems = (state) => state.cart.items.length;
 
-export const selectSubTotal = (state) => state.cart.items.reduce((sum, cartItem) => sum + cartItem.product.price * cartItem.quantity, 0);
+export const selectSubTotal = (state) => state.cart.items.reduce((sum, cartItem) => sum + cartItem.price * cartItem.quantity, 0);
 
 const cartSelector = (state) => state.cart;
 

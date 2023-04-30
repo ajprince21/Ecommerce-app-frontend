@@ -8,7 +8,7 @@ import { FontAwesome5, MaterialCommunityIcons, Entypo, AntDesign } from '@expo/v
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { Header } from '@rneui/themed';
 import axios from 'axios';
-
+import { baseUrl } from '../environment';
 const ProductScreen = () => {
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [products, setProducts] = useState([]);
@@ -22,7 +22,7 @@ const ProductScreen = () => {
 
     getProducts = async () =>{
         axios
-        .get('http://192.168.29.98:8000/products/')
+        .get(baseUrl+'products/')
         .then(res => {
             setProducts(res.data)
             setLoading(false)

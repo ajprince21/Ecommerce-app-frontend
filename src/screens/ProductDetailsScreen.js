@@ -3,7 +3,7 @@ import React from 'react'
 import { FlatList } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { cartSlice } from '../store/cartSlice';
+import { cartSlice , addCartItem} from '../store/cartSlice';
 import { useGetProductQuery } from '../store/apiSlice';
 import { AntDesign } from '@expo/vector-icons';
 const ProductDetailsScreen = ({ route }) => {
@@ -14,7 +14,7 @@ const ProductDetailsScreen = ({ route }) => {
     const dispatch = useDispatch()
 
     const addToCart = () => {
-        dispatch(cartSlice.actions.addCartItem({ product }))
+        dispatch(addCartItem(product))
     }
     if(isLoading){
         return <ActivityIndicator/>;
