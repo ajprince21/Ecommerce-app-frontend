@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import {baseUrl} from '../environment'
 
 const SignupScreen = () => {
 	const navigation = useNavigation();
@@ -14,7 +15,7 @@ const SignupScreen = () => {
 	const handleSignup = () => {
 		// Perform sign-up logic here
 		axios
-			.post('http://192.168.29.98:8000/signup/', {
+			.post(baseUrl+'signup/', {
 				username: username,
 				password: password,
 				first_name: firstName,
@@ -23,8 +24,6 @@ const SignupScreen = () => {
 				password: password
 			})
 			.then(res => {
-				console.log(res)
-				console.log('Printing res-', res.data)
 				navigation.navigate('SignIn')
 			})
 			.catch(error => {
@@ -79,7 +78,7 @@ const SignupScreen = () => {
 				secureTextEntry
 				value={password}
 			/>
-			<TouchableOpacity style={styles.buttonContainer} onPress={handleSignup}>
+			<TouchableOpacity style={styles.buttonContainer} onPress={handleSignup} >
 				<Text style={styles.buttonText}>Sign Up</Text>
 			</TouchableOpacity>
 			<Text onPress={() => navigation.navigate('SignIn')} style={styles.loginText}>Already have an account? Log in</Text>

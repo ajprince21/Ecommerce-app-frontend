@@ -42,10 +42,10 @@ const LoginScreen = () => {
 		})
         .then(async res => {
 			await storeUserToken(res.data.userToken);
-    		dispatch(loginSuccess());
+    		dispatch(loginSuccess(res.data.userToken));
         })
         .catch(error => {
-			console.warn(error.message)
+			Alert.alert('Please enter correct Username & Password');
         });
 	};
 
@@ -65,7 +65,7 @@ const LoginScreen = () => {
 				value={password}
 				onChangeText={setPassword}
 			/>
-			<TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
+			<TouchableOpacity style={styles.buttonContainer} onPress={handleLogin} disabled={!userName || !password}>
 				<Text style={styles.buttonText}>Login</Text>
 			</TouchableOpacity>
 			<Text style={styles.loginText} onPress={()=>navigation.navigate('SignUp')}>Dont't have account? Sign up</Text>

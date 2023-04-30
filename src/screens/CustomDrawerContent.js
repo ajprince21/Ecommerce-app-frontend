@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
 import { logoutSuccess } from '../store/authSlice';
 import { clearAll } from '../store/AsyncStorage';
+import { Alert } from 'react-native';
 
 export default function CustomDrawerContent(props) {
   const navigation = useNavigation();
@@ -31,8 +32,26 @@ export default function CustomDrawerContent(props) {
           />
         }
         onPress={async () => {
-          dispatch(logoutSuccess());
-          clearAll();
+          Alert.alert(
+            'Confirm logout',
+            'Are you sure you want to logout?',
+            [
+              {
+                text: 'Cancel',
+                style: 'cancel',
+              },
+              {
+                text: 'Logout',
+                style: 'destructive',
+                onPress: () => {
+                  dispatch(logoutSuccess());
+                  clearAll();
+                },
+              },
+            ],
+            { cancelable: false }
+          );
+         
         }
         }
       />

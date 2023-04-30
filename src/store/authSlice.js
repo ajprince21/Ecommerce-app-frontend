@@ -31,6 +31,8 @@ export const authSlice = createSlice({
 
 export const { loginSuccess, logoutSuccess , loginFailure} = authSlice.actions;
 
+export const selectToken = (state) => state.auth.token;
+export default authSlice.reducer;
 
 export const authCheck = () => async (dispatch) => {
     try {
@@ -46,5 +48,3 @@ export const authCheck = () => async (dispatch) => {
     }
 };
 
-export const selectToken = (state) => state.auth.token;
-export default authSlice.reducer;
