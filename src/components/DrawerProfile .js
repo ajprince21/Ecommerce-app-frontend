@@ -7,13 +7,7 @@ import { useSelector } from 'react-redux';
 
 
 const DrawerProfile = (props) => {
-	const [userToken, setUserToken] = useState(null);
-	const token = useSelector(selectToken);
-
-	useEffect(() => {
-		setUserToken(token)
-	}, []);
-
+	const userToken = useSelector(selectToken);
 	return (
 		<LinearGradient
 			colors={['#0052D4', '#4364F7', '#6FB1FC']}

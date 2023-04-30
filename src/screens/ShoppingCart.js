@@ -4,6 +4,8 @@ import CartListItem from '../components/CartListItem';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectSubTotal, selectToatlPrice, selectDeliveryPrice , clear, cartSlice, fetchCart } from '../store/cartSlice';
 import { useCreateOrderMutation } from '../store/apiSlice';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 const shoppingCartTotals = () => {
@@ -33,16 +35,21 @@ const ShoppingCart = () => {
     const subtoatl = useSelector(selectSubTotal);
     const deliveryFees = useSelector(selectDeliveryPrice);
     const total = useSelector(selectToatlPrice);
+    const navigation = useNavigation();
 
     const dispatch = useDispatch();
     const { items, loading , error  } = useSelector((state) => state.cart);
     const [createOrder, {data, isLoading}] = useCreateOrderMutation();
 
+
     useEffect(() => {
-        dispatch(fetchCart());
-    }, []);
+        const unsubscribe = navigation.addListener('focus', () => {
+          dispatch(fetchCart());
+        });
     
-    console.log(items);
+        return unsubscribe;
+    }, [dispatch, navigation]);
+    
     const onCreateOrder = async() =>{
         const cartItems = items;
         const result = await createOrder({

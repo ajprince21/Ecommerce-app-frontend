@@ -10,7 +10,6 @@ const ProductDetailsScreen = ({ route }) => {
     const id = route.params.id;
     const {data, isLoading, error} = useGetProductQuery(id);
     const product = data;
-    console.log(product)
     let { width } = useWindowDimensions();
     const dispatch = useDispatch()
 
