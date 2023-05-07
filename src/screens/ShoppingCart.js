@@ -50,25 +50,7 @@ const ShoppingCart = () => {
     }, [dispatch, navigation]);
     
     const onCreateOrder = async() =>{
-        const cartItems = items;
-        const result = await createOrder({
-            items :cartItems,
-            subtoatl,
-            deliveryFees,
-            total,
-            customer:{
-                name:'Ajay Raj Tiwari',
-                address:'Indore',
-                email:'ajay@gmail.com'
-            }
-        })
-        if(result.data?.status === 'OK'){
-            Alert.alert(
-                'Order has been submitted',
-                `Your order reference no is: ${result.data.data.ref}`
-            );
-            dispatch(cartSlice.actions.clear());
-        }
+        console.log('Create order here ')
     }
     if (loading) {
         return <ActivityIndicator />;

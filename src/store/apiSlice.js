@@ -8,10 +8,10 @@ export const apiSlice = createApi({
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: (builder) => ({
     getProducts: builder.query({
-      query: () => 'products',
+      query: () => 'products/',
     }),
     getProduct: builder.query({
-      query: (id) => `products/${id}`,
+      query: (id) => `products/${id}/`,
     }),
     createOrder: builder.mutation({
         query: (newOrder) => ({

@@ -20,7 +20,7 @@ const ProductScreen = () => {
        getProducts();
     },[]);
 
-    getProducts = async () =>{
+    const getProducts = async () =>{
         axios
         .get(baseUrl+'products/')
         .then(res => {
