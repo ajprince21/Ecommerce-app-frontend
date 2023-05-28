@@ -7,7 +7,6 @@ const CartListItem = ({ cartItem }) => {
 	const dispatch = useDispatch();
 
 	const increaseQuantity = () => {
-		console.log('increaseQuantity',cartItem)
 		dispatch(updateCartItemQuantity({ cartItemId: cartItem.id, quantity: 1 }));
 	};
 
